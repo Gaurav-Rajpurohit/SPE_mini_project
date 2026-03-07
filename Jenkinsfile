@@ -23,7 +23,7 @@ pipeline {
 
         stage('Docker Login') {
     steps {
-        bat 'docker login -u %DOCKER_USER% -dckr_pat_3G0TaZht3yhLW1pB80ThnHhTog8'
+        bat 'docker login -u %DOCKER_USER% -p dckr_pat_3G0TaZht3yhLW1pB80ThnHhTog8'
     }
 }
 
