@@ -3,16 +3,13 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "gaurav1374/calculator"
-        DOCKER_CONFIG = "${WORKSPACE}/.docker"
-        
-     	PATH = "/usr/bin:/bin:/usr/sbin:/sbin"
     }
 
     stages {
 
         stage('Checkout Source Code') {
             steps {
-                git url: 'https://github.com/adityadave29/SPE_Mini_Project.git', branch: 'master'
+                git url: 'https://github.com/Gaurav-Rajpurohit/SPE_mini_project.git', branch: 'main'
             }
         }
 
@@ -22,12 +19,6 @@ pipeline {
                 go mod tidy
                 go test -v ./...
                 '''
-            }
-        }
-
-        stage('Start Docker Environment') {
-            steps {
-                sh 'colima start || true'
             }
         }
 
@@ -63,7 +54,7 @@ pipeline {
             }
         }
 
-        stage('Check Connection with Ansible Hosts') {
+        stage('Check Ansible Connection') {
             steps {
                 sh '''
                 ansible -i inventory.ini all -m ping
@@ -79,46 +70,19 @@ pipeline {
             }
         }
     }
-   
 
     post {
 
         success {
-            emailext(
-                subject: "Jenkins Build SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}",
-                body: """
-                Build Successful!
-
-                Job Name: ${JOB_NAME}
-                Build Number: ${BUILD_NUMBER}
-                Build URL: ${BUILD_URL}
-
-                Docker Image: ${DOCKER_IMAGE}:${BUILD_NUMBER}
-                """,
-                to: "daveaditya2004@gmail.com",
-                from: "daveaditya2004@gmail.com"
-            )
+            echo "Build Successful"
         }
 
         failure {
-            emailext(
-                subject: "Jenkins Build FAILED: ${JOB_NAME} #${BUILD_NUMBER}",
-                body: """
-                Build Failed!
-
-                Job Name: ${JOB_NAME}
-                Build Number: ${BUILD_NUMBER}
-                Build URL: ${BUILD_URL}
-
-                Please check Jenkins logs.
-                """,
-                to: "daveaditya2004@gmail.com",
-                from: "daveaditya2004@gmail.com"
-            )
+            echo "Build Failed"
         }
 
         always {
-            echo "Build Finished at: ${new Date()}"
+            echo "Build Finished"
         }
     }
 }
