@@ -41,13 +41,13 @@ pipeline {
 
         stage('Check Ansible Connection') {
             steps {
-                bat 'ansible --version'
+                bat 'wsl ansible --version'
             }
         }
 
         stage('Deploy with Ansible') {
             steps {
-                bat 'ansible-playbook ansible/playbook.yml'
+                bat 'wsl ansible-playbook ansible/playbook.yml'
             }
         }
     }
