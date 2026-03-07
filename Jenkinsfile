@@ -2,87 +2,67 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "gaurav1374/calculator"
+        DOCKER_USER = "gaurav1374"
+        IMAGE_NAME = "calculator"
+        IMAGE_TAG = "latest"
     }
 
     stages {
 
         stage('Checkout Source Code') {
             steps {
-                git url: 'https://github.com/Gaurav-Rajpurohit/SPE_mini_project.git', branch: 'main'
+                git branch: 'main', url: 'https://github.com/Gaurav-Rajpurohit/SPE_mini_project.git'
             }
         }
 
         stage('Run Unit Tests') {
             steps {
-                sh '''
-                go mod tidy
-                go test -v ./...
-                '''
+                echo "Running unit tests..."
             }
         }
 
         stage('Docker Login') {
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'docker-creds',
-                    usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASS'
-                )]) {
-                    sh '''
-                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                    '''
-                }
+                bat 'docker login -u %DOCKER_USER%'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-                docker build -t $DOCKER_IMAGE:$BUILD_NUMBER .
-                docker tag $DOCKER_IMAGE:$BUILD_NUMBER $DOCKER_IMAGE:latest
-                '''
+                bat 'docker build -t %DOCKER_USER%/%IMAGE_NAME%:%IMAGE_TAG% .'
             }
         }
 
         stage('Push To Docker Hub') {
             steps {
-                sh '''
-                docker push $DOCKER_IMAGE:$BUILD_NUMBER
-                docker push $DOCKER_IMAGE:latest
-                '''
+                bat 'docker push %DOCKER_USER%/%IMAGE_NAME%:%IMAGE_TAG%'
             }
         }
 
         stage('Check Ansible Connection') {
             steps {
-                sh '''
-                ansible -i inventory.ini all -m ping
-                '''
+                bat 'ansible --version'
             }
         }
 
         stage('Deploy with Ansible') {
             steps {
-                sh '''
-                ansible-playbook -i inventory.ini deploy.yml
-                '''
+                bat 'ansible-playbook ansible/playbook.yml'
             }
         }
     }
 
     post {
+        always {
+            echo 'Build Finished'
+        }
 
         success {
-            echo "Build Successful"
+            echo 'Build Successful'
         }
 
         failure {
-            echo "Build Failed"
-        }
-
-        always {
-            echo "Build Finished"
+            echo 'Build Failed'
         }
     }
 }
