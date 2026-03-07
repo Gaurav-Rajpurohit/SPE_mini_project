@@ -1,0 +1,18 @@
+---
+- name: Deploy Calculator Container
+  hosts: local
+  become: false
+
+  tasks:
+
+    - name: Stop old container
+      shell: docker stop calculator || true
+
+    - name: Remove old container
+      shell: docker rm calculator || true
+
+    - name: Pull latest image
+      shell: docker pull gaurav1374/calculator:latest
+
+    - name: Run calculator container
+      shell: docker run -d --name calculator gaurav1374/calculator:latest
