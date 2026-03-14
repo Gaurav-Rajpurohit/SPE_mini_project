@@ -16,4 +16,4 @@
       shell: docker pull gaurav1374/calculator:latest
 
     - name: Run calculator container
-      shell: docker run -d --name calculator -p 8080:8080 gaurav1374/calculator:latest
+      shell: docker run -d --name calculator gaurav1374/calculator:latest
