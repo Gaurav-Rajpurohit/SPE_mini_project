@@ -1,20 +1,19 @@
-# Use official Go image
-FROM golang:1.22
+# ---------- Stage 1: Build ----------
+FROM golang:1.23-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy project files
+COPY go.mod ./
+RUN go mod download
+
 COPY . .
-
-# Download dependencies
-RUN go mod tidy
-
-# Run tests
-RUN go test ./...
-
-# Build the application
 RUN go build -o calculator
 
-# Run the binary
+# ---------- Stage 2: Run ----------
+FROM alpine:latest
+
+WORKDIR /root/
+
+COPY --from=builder /app/calculator .
+
 CMD ["./calculator"]
