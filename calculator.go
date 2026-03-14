@@ -68,6 +68,7 @@ func naturalLog(n float64) (float64, error) {
 	return math.Log(n), nil
 }
 
+// comment
 func pow(a, b float64) float64 {
 	return math.Pow(a, b)
 }
