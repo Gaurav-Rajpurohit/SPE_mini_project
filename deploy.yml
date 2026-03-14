@@ -1,7 +1,8 @@
 ---
 - name: Deploy Calculator Container
-  hosts: local
-  become: false
+  hosts: localhost
+  connection: local
+  gather_facts: no
 
   tasks:
 
@@ -15,4 +16,4 @@
       shell: docker pull gaurav1374/calculator:latest
 
     - name: Run calculator container
-      shell: docker run -dit --name calc gaurav1374/calculator:latest
+      shell: docker run -d --name calculator -p 8080:8080 gaurav1374/calculator:latest
