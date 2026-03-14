@@ -22,32 +22,32 @@ pipeline {
         }
 
         stage('Docker Login') {
-            steps {
-                bat "docker login -u %DOCKER_USER% -p dckr_pat_3G0TaZht3yhLW1pB80ThnHhTog8"
-            }
-        }
+    steps {
+        bat 'docker login -u %DOCKER_USER% -p dckr_pat_3G0TaZht3yhLW1pB80ThnHhTog8'
+    }
+}
 
         stage('Build Docker Image') {
             steps {
-                bat "docker build -t %DOCKER_USER%/%IMAGE_NAME%:%IMAGE_TAG% ."
+                bat 'docker build -t %DOCKER_USER%/%IMAGE_NAME%:%IMAGE_TAG% .'
             }
         }
 
         stage('Push To Docker Hub') {
             steps {
-                bat "docker push %DOCKER_USER%/%IMAGE_NAME%:%IMAGE_TAG%"
+                bat 'docker push %DOCKER_USER%/%IMAGE_NAME%:%IMAGE_TAG%'
             }
         }
 
-        stage('Check Ansible in WSL') {
+        stage('Check Ansible Connection') {
             steps {
-                bat "wsl ansible --version"
+                bat 'wsl ansible --version'
             }
         }
 
-        stage('Deploy with Ansible (WSL)') {
+        stage('Deploy with Ansible') {
             steps {
-                bat "wsl ansible-playbook deploy.yml"
+                bat 'wsl ansible-playbook deploy.yml'
             }
         }
     }
