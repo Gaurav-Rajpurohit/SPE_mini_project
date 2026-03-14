@@ -65,8 +65,8 @@ pipeline {
 
             
                 """,
-                to: "1762003rajpurohitgaurav@gmail.com",
-                from: "1762003rajpurohitgaurav@gmail.com"
+                to: "1762003rajpurohitgaurav@gmail.com"
+                
             )
         }
 
@@ -82,8 +82,8 @@ pipeline {
 
                 Please check Jenkins logs.
                 """,
-                to: "1762003rajpurohitgaurav@gmail.com",
-                from: "1762003rajpurohitgaurav@gmail.com"
+                to: "1762003rajpurohitgaurav@gmail.com"
+                
             )
         }
 
