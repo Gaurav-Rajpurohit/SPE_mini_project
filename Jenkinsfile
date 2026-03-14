@@ -53,16 +53,43 @@ pipeline {
     }
 
     post {
-        always {
-            echo 'Build Finished'
-        }
-
         success {
-            echo 'Build Successful'
+            emailext(
+                subject: "Jenkins Build SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}",
+                body: """
+                Build Successful!
+
+                Job Name: ${JOB_NAME}
+                Build Number: ${BUILD_NUMBER}
+                Build URL: ${BUILD_URL}
+
+            
+                """,
+                to: "1762003rajpurohitgaurav@gmail.com",
+                from: "1762003rajpurohitgaurav@gmail.com"
+            )
         }
 
         failure {
-            echo 'Build Failed'
+            emailext(
+                subject: "Jenkins Build FAILED: ${JOB_NAME} #${BUILD_NUMBER}",
+                body: """
+                Build Failed!
+
+                Job Name: ${JOB_NAME}
+                Build Number: ${BUILD_NUMBER}
+                Build URL: ${BUILD_URL}
+
+                Please check Jenkins logs.
+                """,
+                to: "1762003rajpurohitgaurav@gmail.com",
+                from: "1762003rajpurohitgaurav@gmail.com"
+            )
         }
+
+        always {
+            echo "Build Finished at: ${new Date()}"
+        }
+    }
     }
 }
