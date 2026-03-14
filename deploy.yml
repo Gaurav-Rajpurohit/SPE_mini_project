@@ -15,4 +15,4 @@
       shell: docker pull gaurav1374/calculator:latest
 
     - name: Run calculator container
-      shell: docker run -d --name calculator gaurav1374/calculator:latest
+      shell: docker run -dit --name calc gaurav1374/calculator:latest
