@@ -17,7 +17,8 @@ pipeline {
 
         stage('Run Unit Tests') {
             steps {
-                echo "Running unit tests..."
+                
+                bat 'go test ./...'
             }
         }
 
